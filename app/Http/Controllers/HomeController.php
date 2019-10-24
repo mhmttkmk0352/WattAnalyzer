@@ -28,12 +28,12 @@ class HomeController extends Controller
     public function DevicesLastData($user_id, $cihaz_id, $olayLimiti){
 
       $p = DB::table("watt_karsilastir")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->orderBy("id","DESC")->limit($olayLimiti)->get();
- 
+      $w = array();
       foreach($p as $k=>$v){
         $w[$k] = $v->watt;
       }
-      $w = array_reverse($w);
-      return $w;
+      $x = array_reverse($w);
+      return $x;
       
     } 
 
@@ -47,7 +47,7 @@ class HomeController extends Controller
 
     public function index()
     {
-      $olayLimiti = 4;
+      $olayLimiti = 10;
       $data["deviceValuesCount"] = 0;
       $data["datasets"] = "";
       
