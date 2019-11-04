@@ -25,6 +25,27 @@ class HomeController extends Controller
 
     public $arrData = [];
 
+    public $backgroundColor = 
+    [
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)'
+    ];
+    public $borderColor = 
+    [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ];  
+
+
+
     public function DevicesLastData($user_id, $cihaz_id, $olayLimiti){
 
       $p = DB::table("watt_karsilastir")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->orderBy("id","DESC")->limit($olayLimiti)->get();
@@ -45,14 +66,94 @@ class HomeController extends Controller
     }
 
 
+    public function eszamanliVerileriGetir($user_id, $olayLimiti){
+      $c = DB::table("watt_eszamanli")->where("user_id", $user_id)->orderBy("id", "DESC")->limit($olayLimiti)->get();
+      
+      $anlik = [];
+
+      if (isset($c)){
+        if (count($c)>0){
+          foreach($c as $k=>$v){
+            if ( isset($v->anlikdeger) ){
+              $anlikdeger = json_decode($v->anlikdeger);
+              if ( isset($anlikdeger) ){
+                
+                foreach($anlikdeger as $k=>$v){
+                  $anlik[$v->user_id][$v->cihaz_id]["watt"][] = $v->watt;
+                
+                }
+                
+              }
+            }
+          }
+        }
+      }
+
+      /* Anlık değerlerin bulunduğu diziyi(array) ters çevir*/
+      if ( isset($anlik) ){
+        if ( count($anlik)>0 ){
+       
+          foreach($anlik as $k=>$v){
+            
+            if ( isset($v) ){
+              if ( count($v)>0 ){
+                foreach($v as $kk=>$vv){
+                  
+                  $watt = array_reverse($vv["watt"]);
+                  $anlik[$user_id][$kk]["watt"] = $watt;
+                }
+              }
+            }
+            echo "<br>";
+          }
+        }
+      }
+
+      $o = array("es"=>$c, "anlikDegerler"=>$anlik);
+      return $o;
+    }
+
+
     public function index()
     {
+      $data["datasetsIlk"] = "";
+      $data["datasets"] = "";
+
       $olayLimiti = 10;
       $data["deviceValuesCount"] = 0;
       $data["datasets"] = "";
       
       $user_id = Auth::user()->id;
+ 
       if (isset($user_id)){
+        $eszamanCikti = $this->eszamanliVerileriGetir($user_id, $olayLimiti);
+        $es = $eszamanCikti["es"];
+        if ( isset($es) ){
+          if ( count($es)>0 ){
+       
+            foreach($es as $k=>$v){
+           
+              if ( isset($v->anlikdeger) ){
+                $jsondecode = json_decode($v->anlikdeger); 
+              
+                if ( isset($jsondecode) ){
+                  $say = 0;
+                  foreach( $jsondecode as $kk=>$vv ){
+                    $datasetsIlk[$say]["label"] = $kk;
+                    $datasetsIlk[$say]["data"] = $eszamanCikti["anlikDegerler"][$user_id][$kk]["watt"];
+                    $datasetsIlk[$say]["backgroundColor"] = $this->backgroundColor[$say];
+                    $datasetsIlk[$say]["borderColor"] = $this->borderColor[$say];
+                    $datasetsIlk[$say]["borderWidth"] = 1;
+                    $say++;
+                  }
+                }
+
+              }
+
+            }
+          }
+        }
+
         if (is_numeric($user_id)){
           $deviceLists = DB::table("watt_cihazlar")->where("user_id", $user_id)->get();
           if (isset($deviceLists)){
@@ -96,8 +197,8 @@ class HomeController extends Controller
                 $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id);
                 $datasets[$k]["label"] = $v->cihaz_id;
                 $datasets[$k]["data"] = $this->DevicesLastData($user_id, $v->cihaz_id, $olayLimiti);
-                $datasets[$k]["backgroundColor"] = $backgroundColor[$k];
-                $datasets[$k]["borderColor"] = $borderColor[$k];
+                $datasets[$k]["backgroundColor"] = $this->backgroundColor[$k];
+                $datasets[$k]["borderColor"] = $this->borderColor[$k];
                 $datasets[$k]["borderWidth"] = 1;
                 
                 // Bu kısım cihaz değerlerinin en yüksek olanını alıp Charts'e dengeli bir şekilde aktarmak içindir.
@@ -122,8 +223,21 @@ class HomeController extends Controller
                     }
                   }
               }
-              
-              $data["datasets"] = json_encode($datasets);  
+
+              if ( isset($datasetsIlk) ){
+                $data["datasetsIlk"] = json_encode($datasetsIlk);
+              }
+              else{
+                $data["datasetsIlk"] = "";
+              }
+
+              if ( isset($datasets) ){
+                $data["datasets"] = json_encode($datasets);
+              }
+              else{
+                $data["datasets"] = "";
+              }
+
             }
           }
   

@@ -48,30 +48,41 @@
 
      
                     @if (isset(Auth::user()->name))
+
                         <div class="navbar-brand">
-                            <button class="btn btn-sm btn-dark rounded text-white font-weight-bold dugmeler karsilastirmaBtn" style="width:100%;">
-                                <i class="fas fa-balance-scale-right"></i>
-                                <span class="pl-1">GÜNCEL VERİLER</span>
-                            </button>
-                        </div>
-                        <div class="navbar-brand">
-                            <button class="btn btn-sm btn-dark rounded text-white dugmeler font-weight-bold genelortalamaBtn" style="width:100%;">
-                                <i class="fas fa-percentage"></i>
-                                <span class="pl-1">GENEL</span>
-                            </button>
-                        </div>
-                        <div class="navbar-brand">
-                            <button class="btn btn-sm btn-dark rounded bg-color-white text-white font-weight-bold dugmeler" onclick="location.reload()" style="width:100%;">
+                            <button class="btn btn-default navbar-btn" onclick="location.reload()" style="width:100%;">
                                 <i class="fas fa-redo"></i>
                                 <span class="pl-1">YENİLE</span>
                             </button>
                         </div>
-                        @else
                         <div class="navbar-brand">
-                                <button class="btn btn-sm btn-dark rounded text-white font-weight-bold dugmeler" onclick="location.reload()" style="width:100%;">
-                                        <i class="fas fa-home"></i> ANASAYFA
-                                </button>
-                            </div>                        
+                            <button class="btn btn-default navbar-btn eszamanliBtn" style="width:100%;">
+                                <i class="fab fa-squarespace"></i>
+                                <span class="pl-1">Eşzamanlı Değerler</span>
+                            </button>
+                        </div>
+                        <div class="navbar-brand">
+                            <button class="btn btn-default navbar-btn karsilastirmaBtn" style="width:100%;">
+                                <i class="fas fa-database"></i>
+                                <span class="pl-1">Son Değerler</span>
+                            </button>
+                        </div>
+                        <div class="navbar-brand">
+                            <button class="btn btn-default navbar-btn genelortalamaBtn" style="width:100%;">
+                                <i class="fas fa-balance-scale-left"></i>
+                                <span class="pl-1">Genel Ortalama</span>
+                            </button>
+                        </div>
+
+
+                        @else
+
+                        <div class="navbar-brand">
+                            <button class="btn btn-default navbar-btn" onclick="location.reload()" style="width:100%;">
+                                     <i class="fas fa-home"></i> ANASAYFA
+                            </button>
+                        </div>       
+
                     @endif
 
 
@@ -96,8 +107,8 @@
 
                             <li class="nav-item">
                                     <div class="navbar-brand">
-                                        <button class="btn btn-sm btn-primary rounded text-white dugmeler" onclick="genelGirisBtn()" style="width:100%;">
-                                                <i class="fas fa-balance-scale-right"></i> {{ __('Giriş') }}
+                                        <button class="btn btn-default navbar-btn" onclick="genelGirisBtn()" style="width:100%;">
+                                                <i class="fas fa-sign-in-alt"></i> {{ __('Giriş') }}
                                         </button>
                                     </div>
 
@@ -107,8 +118,8 @@
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                         <div class="navbar-brand">
-                                            <button class="btn btn-sm btn-success rounded text-white dugmeler" onclick="genelKayitBtn()" style="width:100%;">
-                                                    <i class="fas fa-balance-scale-right"></i> {{ __('Kaydol') }}
+                                            <button class="btn btn-default navbar-btn" onclick="genelKayitBtn()" style="width:100%;">
+                                                    <i class="fas fa-save"></i>    {{ __('Kaydol') }}
                                             </button>
                                         </div>
 
