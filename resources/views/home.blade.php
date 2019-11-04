@@ -144,7 +144,7 @@ $(document).ready(function(){
         var anlikdegerTarihleri = "";
         datasets = '<?php print_r($data["datasets"]); ?>';
         datasetsIlk = '<?php print_r($data["datasetsIlk"]); ?>';
-        anlikdegerTarihleri = '<?php print_r($data["anlikdegerTarihleri"]); ?>';
+        anlikdegerTarihleri = '<?php if (isset($data["anlikdegerTarihleri"])){print_r($data["anlikdegerTarihleri"]);}else{print_r([]);}?>';
 
         
         if (datasets && datasetsIlk && anlikdegerTarihleri){
