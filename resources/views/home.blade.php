@@ -141,10 +141,13 @@ $(document).ready(function(){
 
         var datasets = "";
         var datasetsIlk = "";
+        var anlikdegerTarihleri = "";
         datasets = '<?php print_r($data["datasets"]); ?>';
         datasetsIlk = '<?php print_r($data["datasetsIlk"]); ?>';
+        anlikdegerTarihleri = '<?php print_r($data["anlikdegerTarihleri"]); ?>';
+
         
-        if (datasets && datasetsIlk){
+        if (datasets && datasetsIlk && anlikdegerTarihleri){
 
             $(".cardTitle").text("");
 
@@ -159,6 +162,8 @@ $(document).ready(function(){
             console.log(jpdatasetsIlk);
             console.log("</datasetsIlk>");
 
+
+   
             var simdi = new Date();
 
             suan = sifirKoy(simdi.getHours())+":"+sifirKoy(simdi.getMinutes());
@@ -169,7 +174,7 @@ $(document).ready(function(){
             var myChart11 = new Chart(ctx11, {
                 type: 'line',
                 data: {
-                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],            
+                    labels: JSON.parse(anlikdegerTarihleri),            
                     datasets: jpdatasetsIlk
                 },
                 options: {

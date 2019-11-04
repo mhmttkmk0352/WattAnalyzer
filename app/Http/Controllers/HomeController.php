@@ -128,17 +128,22 @@ class HomeController extends Controller
       if (isset($user_id)){
         $eszamanCikti = $this->eszamanliVerileriGetir($user_id, $olayLimiti);
         $es = $eszamanCikti["es"];
+        $anlikdegerTarihleri = [];
+        $anlikdegerTimeStamp = [];
         if ( isset($es) ){
           if ( count($es)>0 ){
-       
             foreach($es as $k=>$v){
-           
+              array_push($anlikdegerTarihleri, date("h:i:s", $v->tarih));
+              array_push($anlikdegerTimeStamp, $v->tarih);
+              
               if ( isset($v->anlikdeger) ){
                 $jsondecode = json_decode($v->anlikdeger); 
               
                 if ( isset($jsondecode) ){
                   $say = 0;
+             
                   foreach( $jsondecode as $kk=>$vv ){
+                   
                     $datasetsIlk[$say]["label"] = $kk;
                     $datasetsIlk[$say]["data"] = $eszamanCikti["anlikDegerler"][$user_id][$kk]["watt"];
                     $datasetsIlk[$say]["backgroundColor"] = $this->backgroundColor[$say];
@@ -146,11 +151,14 @@ class HomeController extends Controller
                     $datasetsIlk[$say]["borderWidth"] = 1;
                     $say++;
                   }
+             
                 }
 
               }
 
             }
+
+            
           }
         }
 
@@ -222,6 +230,20 @@ class HomeController extends Controller
                       
                     }
                   }
+              }
+
+              if ( isset($anlikdegerTarihleri) ){
+                $data["anlikdegerTarihleri"] = json_encode($anlikdegerTarihleri);
+              }
+              else{
+                $data["anlikdegerTarihleri"] = [];
+              }
+
+              if ( isset($anlikdegerTimeStamp) ){
+                $data["anlikdegerTimeStamp"] = json_encode($anlikdegerTimeStamp);                
+              }
+              else{
+                $data["anlikdegerTimeStamp"] = [];
               }
 
               if ( isset($datasetsIlk) ){
