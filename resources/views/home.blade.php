@@ -63,20 +63,19 @@
                     </div>
 
                     <div class="row justify-content-center genelortalamaArayuzu mx-0">
-                        <div class="col-12">
+                        <div class="col-6">
 
-                                <div class="row justify-content-end">
-                                        <select>
+                                <div class="row justify-content-end pr-0">
+                                        <select class="form-control pr-0 mr-0 genelOrtalamaSelect">
         
-                                                <option value="genelgrafik">Genel Grafik</option>
-                                                <option value="gununGrafigi">Son 24 Saatin Grafiği</option>
-                                                <option value="haftaninGrafigi">Son 7 Günün Grafik</option>
-                                                <option value="ayinGrafigi">Son 30 Günün Grafiği</option>
-                                                <option value="yilinGrafigi">Son 1 Yılın Grafiği</option>
+                                            <option value="genelgrafik">Genel Grafik</option>
+                                            <option value="birsaatinGrafigi">Son 1 Saatin Grafiği</option>
+                                            <option value="gununGrafigi">Son 24 Saatin Grafiği</option>
+                                            <option value="haftaninGrafigi">Son 7 Günün Grafik</option>
+                                            <option value="ayinGrafigi">Son 30 Günün Grafiği</option>
+                                            <option value="yilinGrafigi">Son 1 Yılın Grafiği</option>
                                                 
-                                                
-                                                
-                                            </select>
+                                        </select>
                                 </div>
                         </div>
 
@@ -117,6 +116,13 @@
 
 
 $(document).ready(function(){
+    if (location.search && location.search != ""){
+        var lo_se = location.search.replace("?","").split("=")[1];
+        if (lo_se && lo_se != ""){
+            $(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
+        }
+    }
+
     function arayuzHide(){
         $(".karsilastirmaBtn").css("background-color","transparent");      
         $(".genelortalamaBtn").css("background-color","transparent");      
@@ -130,6 +136,7 @@ $(document).ready(function(){
     arayuzHide();
     $(".eszamanliArayuzu").show(); 
 
+   
 
 
     if (!localStorage.getItem("sayfa")){
@@ -138,17 +145,17 @@ $(document).ready(function(){
 
     if (localStorage.getItem("sayfa") == "karsilastirmaArayuzu"){
         arayuzHide();
-        $(".karsilastirmaBtn").css("background-color","#FF5733");
+        $(".karsilastirmaBtn").css("background-color","#DAF7A6");
         $(".karsilastirmaArayuzu").show();       
     }
     else if (localStorage.getItem("sayfa") == "genelortalamaArayuzu"){
         arayuzHide();
-        $(".genelortalamaBtn").css("background-color","#FF5733");     
+        $(".genelortalamaBtn").css("background-color","#DAF7A6");     
         $(".genelortalamaArayuzu").show();
     }
     else if (localStorage.getItem("sayfa") == "eszamanliArayuzu"){
         arayuzHide();
-        $(".eszamanliBtn").css("background-color","#FF5733");     
+        $(".eszamanliBtn").css("background-color","#DAF7A6");     
         $(".eszamanliArayuzu").show();  
     }
 
@@ -175,7 +182,10 @@ $(document).ready(function(){
     });
 
 
-
+    $(document).on("change", ".genelOrtalamaSelect", function(){
+        console.log( $(this).val() );
+        location.href = '{{ url("/home")}}?genelortalama='+$(this).val();
+    });
 
 
 

@@ -60,8 +60,8 @@ class HomeController extends Controller
 
 
 
-    public function Average($user_id, $cihaz_id){
-          $avgValue = DB::table("watt_eszamanlikarsilastir")->select("watt")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->get()->avg("watt");
+    public function Average($user_id, $cihaz_id, $whereBetween){
+          $avgValue = DB::table("watt_eszamanlikarsilastir")->select("watt")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->whereBetween("tarih",$whereBetween)->get()->avg("watt");
           return round($avgValue,1);
     }
 
@@ -116,12 +116,49 @@ class HomeController extends Controller
 
     public function index()
     {
-      $suan = time();
 
+
+
+
+      $suan = time();
+      $birsaat =10;
       $gun = 60*60*24;
       $hafta = $gun*7;
       $ay = $gun*30;
       $yil = $ay*12;
+
+
+
+      $whereBetween = array(0, 999999999999999);
+      if ( isset($_GET["genelortalama"]) && $_GET["genelortalama"] !=""){
+        if ( $_GET["genelortalama"] == "birsaatinGrafigi"){
+          $whereBetween = array(($suan-$birsaat), $suan);
+        }           
+        else if ( $_GET["genelortalama"] == "gununGrafigi"){
+          $whereBetween = array(($suan-$gun), $suan);
+        }         
+        else if ( $_GET["genelortalama"] == "haftaninGrafigi"){
+          $whereBetween = array(($suan-$hafta), $suan);
+        }
+        else if ( $_GET["genelortalama"] == "ayinGrafigi"){
+          $whereBetween = array(($suan-$ay), $suan);
+        }
+        else if ( $_GET["genelortalama"] == "yilinGrafigi"){
+          $whereBetween = array(($suan-$yil), $suan);
+        }
+        else{
+          $whereBetween = array(0, 999999999999999);
+        }
+      }
+      else{
+        $whereBetween = array(0, 999999999999999);
+      }
+
+
+
+
+
+
       $data["datasetsIlk"] = "";
       $data["datasets"] = "";
 
@@ -132,22 +169,7 @@ class HomeController extends Controller
       $user_id = Auth::user()->id;
  
       if (isset($user_id)){
-        
-        if ( $_GET["genelortalama"] == "gunungrafigi"){
-          $whereBetween = array(($suan-$gun), $suan);
-        }
-        else if ( $_GET["genelortalama"] == "haftaningrafigi"){
-          $whereBetween = array(($suan-$hafta), $suan);
-        }
-        else if ( $_GET["genelortalama"] == "ayingrafigi"){
-          $whereBetween = array(($suan-$ay), $suan);
-        }
-        else if ( $_GET["genelortalama"] == "yilingrafigi"){
-          $whereBetween = array(($suan-$yil), $suan);
-        }
-        else{
-          $whereBetween = array(0, 999999999999999);
-        }
+
 
         $eszamanCikti = $this->eszamanliVerileriGetir($user_id, $olayLimiti, $whereBetween);
         $es = $eszamanCikti["es"];
@@ -225,7 +247,7 @@ class HomeController extends Controller
 
 
               foreach($deviceLists as $k=>$v){
-                $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id);
+                $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id, $whereBetween);
                 $datasets[$k]["label"] = $v->cihaz_id;
                 $datasets[$k]["data"] = $this->DevicesLastData($user_id, $v->cihaz_id, $olayLimiti);
                 $datasets[$k]["backgroundColor"] = $this->backgroundColor[$k];
