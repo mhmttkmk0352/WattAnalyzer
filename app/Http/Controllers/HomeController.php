@@ -61,7 +61,7 @@ class HomeController extends Controller
 
 
     public function Average($user_id, $cihaz_id){
-          $avgValue = DB::table("watt_karsilastir")->select("watt")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->get()->avg("watt");
+          $avgValue = DB::table("watt_eszamanlikarsilastir")->select("watt")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->get()->avg("watt");
           return round($avgValue,1);
     }
 
