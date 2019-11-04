@@ -21,5 +21,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get("/home/datatablenotlistele", "HomeController@datatableNotListele")->name("datatableNotListele");
+//Route::get("/home/datatablenotlistele", "HomeController@datatableNotListele")->name("datatableNotListele");
 

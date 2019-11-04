@@ -66,8 +66,8 @@ class HomeController extends Controller
     }
 
 
-    public function eszamanliVerileriGetir($user_id, $olayLimiti){
-      $c = DB::table("watt_eszamanli")->where("user_id", $user_id)->orderBy("id", "DESC")->limit($olayLimiti)->get();
+    public function eszamanliVerileriGetir($user_id, $olayLimiti, $whereBetween){
+      $c = DB::table("watt_eszamanli")->where("user_id", $user_id)->orderBy("id", "DESC")->limit($olayLimiti)->whereBetween("tarih",$whereBetween)->get();
       
       $anlik = [];
 
@@ -116,6 +116,12 @@ class HomeController extends Controller
 
     public function index()
     {
+      $suan = time();
+
+      $gun = 60*60*24;
+      $hafta = $gun*7;
+      $ay = $gun*30;
+      $yil = $ay*12;
       $data["datasetsIlk"] = "";
       $data["datasets"] = "";
 
@@ -126,7 +132,24 @@ class HomeController extends Controller
       $user_id = Auth::user()->id;
  
       if (isset($user_id)){
-        $eszamanCikti = $this->eszamanliVerileriGetir($user_id, $olayLimiti);
+        
+        if ( $_GET["genelortalama"] == "gunungrafigi"){
+          $whereBetween = array(($suan-$gun), $suan);
+        }
+        else if ( $_GET["genelortalama"] == "haftaningrafigi"){
+          $whereBetween = array(($suan-$hafta), $suan);
+        }
+        else if ( $_GET["genelortalama"] == "ayingrafigi"){
+          $whereBetween = array(($suan-$ay), $suan);
+        }
+        else if ( $_GET["genelortalama"] == "yilingrafigi"){
+          $whereBetween = array(($suan-$yil), $suan);
+        }
+        else{
+          $whereBetween = array(0, 999999999999999);
+        }
+
+        $eszamanCikti = $this->eszamanliVerileriGetir($user_id, $olayLimiti, $whereBetween);
         $es = $eszamanCikti["es"];
         $anlikdegerTarihleri = [];
         $anlikdegerTimeStamp = [];

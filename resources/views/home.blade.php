@@ -63,6 +63,23 @@
                     </div>
 
                     <div class="row justify-content-center genelortalamaArayuzu mx-0">
+                        <div class="col-12">
+
+                                <div class="row justify-content-end">
+                                        <select>
+        
+                                                <option value="genelgrafik">Genel Grafik</option>
+                                                <option value="gununGrafigi">Son 24 Saatin Grafiği</option>
+                                                <option value="haftaninGrafigi">Son 7 Günün Grafik</option>
+                                                <option value="ayinGrafigi">Son 30 Günün Grafiği</option>
+                                                <option value="yilinGrafigi">Son 1 Yılın Grafiği</option>
+                                                
+                                                
+                                                
+                                            </select>
+                                </div>
+                        </div>
+
                         <canvas id="myChart2" class="" style="width:100%;"></canvas>
                         <div class="col-12"><hr></div>
                         <canvas id="myChart3" class="" style="width:100%;"></canvas>
@@ -101,6 +118,10 @@
 
 $(document).ready(function(){
     function arayuzHide(){
+        $(".karsilastirmaBtn").css("background-color","transparent");      
+        $(".genelortalamaBtn").css("background-color","transparent");      
+        $(".eszamanliBtn").css("background-color","transparent");      
+         
         $(".eszamanliArayuzu").hide();        
         $(".karsilastirmaArayuzu").hide();
         $(".genelortalamaArayuzu").hide();        
@@ -110,18 +131,49 @@ $(document).ready(function(){
     $(".eszamanliArayuzu").show(); 
 
 
+
+    if (!localStorage.getItem("sayfa")){
+        localStorage.getItem("sayfa") = "";
+    }
+
+    if (localStorage.getItem("sayfa") == "karsilastirmaArayuzu"){
+        arayuzHide();
+        $(".karsilastirmaBtn").css("background-color","#FF5733");
+        $(".karsilastirmaArayuzu").show();       
+    }
+    else if (localStorage.getItem("sayfa") == "genelortalamaArayuzu"){
+        arayuzHide();
+        $(".genelortalamaBtn").css("background-color","#FF5733");     
+        $(".genelortalamaArayuzu").show();
+    }
+    else if (localStorage.getItem("sayfa") == "eszamanliArayuzu"){
+        arayuzHide();
+        $(".eszamanliBtn").css("background-color","#FF5733");     
+        $(".eszamanliArayuzu").show();  
+    }
+
+
+
+
     $(document).on("click", ".karsilastirmaBtn", function(){
+        localStorage.setItem("sayfa", "karsilastirmaArayuzu");
         arayuzHide();
         $(".karsilastirmaArayuzu").show();
+        
     }); 
     $(document).on("click", ".genelortalamaBtn", function(){
+        localStorage.setItem("sayfa", "genelortalamaArayuzu");  
         arayuzHide();
-        $(".genelortalamaArayuzu").show();        
+        $(".genelortalamaArayuzu").show();
+                      
     });
     $(document).on("click", ".eszamanliBtn", function(){
+        localStorage.setItem("sayfa", "eszamanliArayuzu");         
         arayuzHide();
-        $(".eszamanliArayuzu").show();         
+        $(".eszamanliArayuzu").show();  
+                      
     });
+
 
 
 
@@ -198,7 +250,7 @@ $(document).ready(function(){
             var myChart12 = new Chart(ctx12, {
                 type: 'bar',
                 data: {
-                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],            
+                    labels: JSON.parse(anlikdegerTarihleri),            
                     datasets: jpdatasetsIlk
                 },
                 options: {
