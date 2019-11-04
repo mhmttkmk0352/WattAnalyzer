@@ -180,12 +180,12 @@ $(document).ready(function(){
         $(".eszamanliArayuzu").show();  
                       
     });
-
-
     $(document).on("change", ".genelOrtalamaSelect", function(){
         console.log( $(this).val() );
         location.href = '{{ url("/home")}}?genelortalama='+$(this).val();
     });
+
+
 
 
 

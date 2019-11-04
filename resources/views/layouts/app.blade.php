@@ -50,10 +50,12 @@
                     @if (isset(Auth::user()->name))
 
                         <div class="navbar-brand">
-                            <button class="btn btn-default navbar-btn" onclick="location.reload()" style="width:100%;">
+                        <a href="{{ url("home") }}">
+                            <button class="btn btn-default navbar-btn" style="width:100%;">
                                 <i class="fas fa-redo"></i>
                                 <span class="pl-1">YENİLE</span>
                             </button>
+                            </a>
                         </div>
                         <div class="navbar-brand">
                             <button class="btn btn-default navbar-btn eszamanliBtn" style="width:100%;">
