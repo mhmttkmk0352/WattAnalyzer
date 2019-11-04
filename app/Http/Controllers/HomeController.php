@@ -121,8 +121,8 @@ class HomeController extends Controller
 
 
       $suan = time();
-      $birsaat =10;
-      $gun = 60*60*24;
+      $birsaat = 60*60;
+      $gun = $birsaat*24;
       $hafta = $gun*7;
       $ay = $gun*30;
       $yil = $ay*12;
