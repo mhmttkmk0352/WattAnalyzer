@@ -117,7 +117,32 @@ class WattKiyas extends Controller
                                 echo "<br>\r\n";
                                 echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
                                 echo "<br>\r\n";
-                                echo "<br>\r\n";                          
+                                echo "<br>\r\n";     
+                                
+                                if (isset($jsnInsert)){
+                                    if (count($jsnInsert)>0){
+                                        if ( isset($jsnInsert["anlikdeger"]) ){
+                                            $an_JSN = json_decode($jsnInsert["anlikdeger"]);
+                                            if ( isset($an_JSN) ){
+                                                $json = [];
+                                                foreach($an_JSN as $k=>$v){
+                                                    $json[$k]["user_id"] = $v->user_id;
+                                                    $json[$k]["cihaz_id"] = $v->cihaz_id;
+                                                    $json[$k]["voltaj"] = $v->voltaj;
+                                                    $json[$k]["amper"] = $v->amper;
+                                                    $json[$k]["watt"] = $v->watt;
+                                                    $json[$k]["tarih"] = $v->tarih;
+                                                    $json[$k]["eszamanli_tarih"] = $suan;
+                                                    
+                                                    DB::table("watt_eszamanlikarsilastir")->insert($json[$k]);
+                                                }
+                                                
+                                                //DB::table("watt_eszamanlikarsilastir")->insert($json[$k]);
+                                                
+                                            }
+                                        }
+                                    }
+                                }
                 
                 
                             }//if ($suanSonFarki > $this->filterSeconds)
