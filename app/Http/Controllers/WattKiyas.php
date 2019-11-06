@@ -27,22 +27,22 @@ class WattKiyas extends Controller
 
 
             $varmi = DB::table("watt_cihazlar")->where("user_id", $c["user_id"])->where("cihaz_id",$c["cihaz_id"])->get();
-       
+
             if (count($varmi) != 1){
-            
+
                 DB::table("watt_cihazlar")->insert($c);
-                echo "Cihaz Eklendi";
-                echo "<br>\r\n";
+                //echo "Cihaz Eklendi";
+                //echo "<br>\r\n";
             }
             else{
-                echo "Cihaz zaten ekliydi";
+                //echo "Cihaz zaten ekliydi";
             }
 
             $p["tarih"] = time();
             $p["watt"] = $p["voltaj"]*$p["amper"];
             DB::table("watt_karsilastir")->insert($p);
 
-            echo "<br>\r\n";
+            //echo "<br>\r\n";
 
 /* BAŞLANGIÇ */
             $differenceCount = 0;
@@ -60,18 +60,18 @@ class WattKiyas extends Controller
                                     $differenceCount= $diff;
                                 }
                             }
-   
+
                         }
 
-                        
+
                     }
-                    echo "diff: ";
-                    echo $differenceCount; 
+                    //echo "diff: ";
+                    //echo $differenceCount;
                     if($differenceCount < $this->filterSeconds){
-                       echo "Kaydet";
-                       echo "<br>\r\n";
-     
-                      
+                       //echo "Kaydet";
+                       //echo "<br>\r\n";
+
+
                         $w = DB::table("watt_eszamanli")->select("*")->get();
 
                         $jsn = [];
@@ -90,35 +90,36 @@ class WattKiyas extends Controller
                             $jsn[$t_cek->cihaz_id]["tarih"] = $t_cek->tarih;
 
                         }
-                       
+
                         $jsnInsert = array("user_id"=>$user_id, "anlikdeger"=>json_encode($jsn), "tarih"=>time());
                         $jsnAdet = count($jsn);
-                        
+
                         if ($jsnAdet && $jsnAdet<2){
-                            echo "<br>\r\n";
-                            echo "Tek taraflı veri sebebiyle ekleme yapılamadı ( ".$this->filterSeconds." )";
-                            echo "<br>\r\n";
-                            echo "<br>\r\n"; 
-                            exit();                                 
+                            //echo "<br>\r\n";
+                            //echo "Tek taraflı veri sebebiyle ekleme yapılamadı ( ".$this->filterSeconds." )";
+                            //echo "<br>\r\n";
+                            //echo "<br>\r\n";
+                            //exit();
                         }
 
                         $sonEsZamanliVeriGetir = DB::table("watt_eszamanli")->select("tarih")->get()->last();
-                     
+
                         if ( isset($sonEsZamanliVeriGetir) && isset($sonEsZamanliVeriGetir->tarih) && is_numeric($sonEsZamanliVeriGetir->tarih) ){
 
                             $suanSonFarki = $suan-$sonEsZamanliVeriGetir->tarih;
-                            echo $suanSonFarki;
-                            echo "<br>";
-                                
+                            //echo $suanSonFarki;
+                            //echo "<br>";
+
                             if ($suanSonFarki > $this->filterSeconds){
-                
+
                                 DB::table("watt_eszamanli")->insert($jsnInsert);
 
-                                echo "<br>\r\n";
-                                echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
-                                echo "<br>\r\n";
-                                echo "<br>\r\n";     
-                                
+                                //echo "<br>\r\n";
+                                //echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
+                                //echo "<br>\r\n";
+                                //echo "<br>\r\n";
+                                return 1;
+
                                 if (isset($jsnInsert)){
                                     if (count($jsnInsert)>0){
                                         if ( isset($jsnInsert["anlikdeger"]) ){
@@ -133,43 +134,44 @@ class WattKiyas extends Controller
                                                     $json[$k]["watt"] = $v->watt;
                                                     $json[$k]["tarih"] = $v->tarih;
                                                     $json[$k]["eszamanli_tarih"] = $suan;
-                                                    
+
                                                     DB::table("watt_eszamanlikarsilastir")->insert($json[$k]);
                                                 }
-                                                
-                                                //DB::table("watt_eszamanlikarsilastir")->insert($json[$k]);
-                                                
+
                                             }
                                         }
                                     }
                                 }
-                
-                
+
+
                             }//if ($suanSonFarki > $this->filterSeconds)
                             else{
-                                echo "Üst üste veri girmezsiniz";
-                                exit();
-                            }                                
+                                //echo "Üst üste veri girmezsiniz";
+                                return 2;
+                                //exit();
+                            }
 
                         }
                         else{
                             DB::table("watt_eszamanli")->insert($jsnInsert);
 
-                            echo "<br>\r\n";
-                            echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
-                            echo "<br>\r\n";
-                            echo "<br>\r\n";                                
+                            //echo "<br>\r\n";
+                            //echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
+                            //echo "<br>\r\n";
+                            //echo "<br>\r\n";
+                            return 1;
                         }
 
-                        
+
 
                     }
                     else{
-                        echo "<br>\r\n";
-                        echo "Zaman Aşımı Sebebiyle ekleme yapılamadı: limit ( ".$this->filterSeconds." )";
-                        echo "<br>\r\n";
-                        echo "<br>\r\n";
-                    }  //END if ($suanSonFarki > $this->filterSeconds)                 
+                        //echo "<br>\r\n";
+                        //echo "Zaman Aşımı Sebebiyle ekleme yapılamadı: limit ( ".$this->filterSeconds." )";
+                        //echo "<br>\r\n";
+                        //echo "<br>\r\n";
+                        return 3;
+                    }  //END if ($suanSonFarki > $this->filterSeconds)
                 }
             }
 /* BİTİŞ */
@@ -178,11 +180,12 @@ class WattKiyas extends Controller
 
 
 
-    
+
         }
         else{
-            echo 0;
-        }        
+            //echo "cihaz adi voltaj ya amper degerinden biri ya da birkaci eksik veya yok";
+            return 4;
+        }
     }
 
 
@@ -195,9 +198,9 @@ class WattKiyas extends Controller
 
         $val = DB::table("users")->select("id","password")->where("email", $p["email"])->get();
 
-    
 
-   
+
+
 
         if (isset($val)){
 
@@ -210,26 +213,25 @@ class WattKiyas extends Controller
                     //echo "Kullanıcı Bilgileri Doğru: ".$durum;
                     //echo "<br>\r\n";
 
-     
                     $p["user_id"] = $user_id;
                     $p["cihaz_id"] = $_GET["c"];
                     $p["voltaj"] = $_GET["v"];
                     $p["amper"] = $_GET["a"];
-    
+
                     $this->wattekle_ekstra($user_id, $p, $val);
 
                 }
                 else{
                     //echo "Kullanıcı Bilgileri Yanlış: ".$durum;
                     //echo "<br>\r\n";
-                    echo 0;                    
+                    return 0;
                 }
 
         }
         else{
             //echo "Eşleşme yok";
-            echo 0;
-            exit();
+            return 0;
+            //exit();
         }
     }
 }
