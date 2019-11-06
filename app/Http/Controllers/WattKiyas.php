@@ -207,8 +207,9 @@ class WattKiyas extends Controller
 
                 if ($durum == 1){
 
-                    echo "Kullanıcı Bilgileri Doğru: ".$durum;
-                    echo "<br>\r\n";
+                    //echo "Kullanıcı Bilgileri Doğru: ".$durum;
+                    //echo "<br>\r\n";
+
      
                     $p["user_id"] = $user_id;
                     $p["cihaz_id"] = $_GET["c"];
@@ -219,13 +220,15 @@ class WattKiyas extends Controller
 
                 }
                 else{
-                    echo "Kullanıcı Bilgileri Yanlış: ".$durum;
-                    echo "<br>\r\n";                    
+                    //echo "Kullanıcı Bilgileri Yanlış: ".$durum;
+                    //echo "<br>\r\n";
+                    echo 0;                    
                 }
 
         }
         else{
-            echo "Eşleşme yok";
+            //echo "Eşleşme yok";
+            echo 0;
             exit();
         }
     }

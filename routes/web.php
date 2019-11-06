@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set("Europe/Istanbul");
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,5 +21,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-//Route::get("/home/datatablenotlistele", "HomeController@datatableNotListele")->name("datatableNotListele");
 
