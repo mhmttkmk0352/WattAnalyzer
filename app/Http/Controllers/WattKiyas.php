@@ -99,7 +99,8 @@ class WattKiyas extends Controller
                             //echo "Tek taraflı veri sebebiyle ekleme yapılamadı ( ".$this->filterSeconds." )";
                             //echo "<br>\r\n";
                             //echo "<br>\r\n";
-                            //exit();
+                            echo 5;
+                            exit();
                         }
 
                         $sonEsZamanliVeriGetir = DB::table("watt_eszamanli")->select("tarih")->get()->last();
@@ -118,7 +119,7 @@ class WattKiyas extends Controller
                                 //echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
                                 //echo "<br>\r\n";
                                 //echo "<br>\r\n";
-                                return 1;
+
 
                                 if (isset($jsnInsert)){
                                     if (count($jsnInsert)>0){
@@ -143,12 +144,13 @@ class WattKiyas extends Controller
                                     }
                                 }
 
-
+                                echo 1;
+                                exit();
                             }//if ($suanSonFarki > $this->filterSeconds)
                             else{
                                 //echo "Üst üste veri girmezsiniz";
-                                return 2;
-                                //exit();
+                                echo 2;
+                                exit();
                             }
 
                         }
@@ -159,7 +161,8 @@ class WattKiyas extends Controller
                             //echo "Eş zamanlı tablo eklemesi başarılı ( ".$this->filterSeconds." )";
                             //echo "<br>\r\n";
                             //echo "<br>\r\n";
-                            return 1;
+                            echo 1;
+                            exit();
                         }
 
 
@@ -170,7 +173,8 @@ class WattKiyas extends Controller
                         //echo "Zaman Aşımı Sebebiyle ekleme yapılamadı: limit ( ".$this->filterSeconds." )";
                         //echo "<br>\r\n";
                         //echo "<br>\r\n";
-                        return 3;
+                        echo 3;
+                        exit();
                     }  //END if ($suanSonFarki > $this->filterSeconds)
                 }
             }
@@ -184,7 +188,8 @@ class WattKiyas extends Controller
         }
         else{
             //echo "cihaz adi voltaj ya amper degerinden biri ya da birkaci eksik veya yok";
-            return 4;
+            echo  4;
+            exit();
         }
     }
 
@@ -224,14 +229,15 @@ class WattKiyas extends Controller
                 else{
                     //echo "Kullanıcı Bilgileri Yanlış: ".$durum;
                     //echo "<br>\r\n";
-                    return 0;
+                    echo 0;
+                    exit();
                 }
 
         }
         else{
             //echo "Eşleşme yok";
-            return 0;
-            //exit();
+            echo 0;
+            exit();
         }
     }
 }
