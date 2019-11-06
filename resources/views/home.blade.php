@@ -2,13 +2,15 @@
 @section('content')
 
 
-<script type="text/javascript" charset="utf8" src="../node_modules/chart.js/dist/Chart.js"></script>
+<script type="text/javascript" charset="utf8" src="../../node_modules/chart.js/dist/Chart.js"></script>
 
+<script>
 
+</script>
 
 <style>
     .cardHeaderFooter {
-        background-color: rgba(0,0,0,0.03);       
+        background-color: rgba(0,0,0,0.03);
     }
     .dugmeler {
         display: none;
@@ -16,6 +18,9 @@
     .dugmeler:hover {
         background-color: lightseagreen;
         border: 1px solid lightseagreen;
+    }
+    .karsilastirmaArayuzu, .eszamanliArayuzu, .genelortalamaArayuzu {
+        display:none;
     }
 
 
@@ -30,30 +35,30 @@
                         <div class="row justify-content-center text-center">
 
                                 <span class="cardTitle" style="font-weight: bold; font-size: 1em; color: #191919">
-                                    
-                                </span> 
-  
 
-                        </div>  
+                                </span>
+
+
+                        </div>
                 </div>
 
-                
 
-                <div class="card-body cardMerkez" style="">    
+
+                <div class="card-body cardMerkez" style="">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
 
-                   
+
                     <div class="row justify-content-center eszamanliArayuzu mx-0">
                         <canvas id="myChart11" class="" style="width:100%;"></canvas>
                         <div class="col-12"><hr></div>
                         <canvas id="myChart12" class="" style="width:100%;"></canvas>
 
                     </div>
-                   
+
 
                     <div class="row justify-content-center karsilastirmaArayuzu mx-0">
                         <canvas id="myChart0" class="" style="width:100%;"></canvas>
@@ -67,14 +72,14 @@
 
                                 <div class="row justify-content-end pr-0">
                                         <select class="form-control pr-0 mr-0 genelOrtalamaSelect">
-        
+
                                             <option value="genelgrafik">Genel Grafik</option>
                                             <option value="birsaatinGrafigi">Son 1 Saatin Grafiği</option>
                                             <option value="gununGrafigi">Son 24 Saatin Grafiği</option>
                                             <option value="haftaninGrafigi">Son 7 Günün Grafik</option>
                                             <option value="ayinGrafigi">Son 30 Günün Grafiği</option>
                                             <option value="yilinGrafigi">Son 1 Yılın Grafiği</option>
-                                                
+
                                         </select>
                                 </div>
                         </div>
@@ -90,13 +95,13 @@
                 </div>
 
 
-    
+
 
                 <div class="card-footer cardHeaderFooter">
                         <div class="row justify-content-center">
                             <span class="cardTitle" style="font-weight: bold; font-size: 0.9em; display:none">
                                 <a href="https://argebilisim.com.tr/"> argebilisim.com.tr </a>
-                            </span>                        
+                            </span>
                         </div>
                     </div>
 
@@ -116,6 +121,20 @@
 
 
 $(document).ready(function(){
+
+    function arayuzHide(){
+        $(".karsilastirmaBtn").css("background-color","transparent");
+        $(".genelortalamaBtn").css("background-color","transparent");
+        $(".eszamanliBtn").css("background-color","transparent");
+
+        $(".eszamanliArayuzu").hide();
+        $(".karsilastirmaArayuzu").hide();
+        $(".genelortalamaArayuzu").hide();
+    }
+    arayuzHide();
+
+
+
     if (location.search && location.search != ""){
         var lo_se = location.search.replace("?","").split("=")[1];
         if (lo_se && lo_se != ""){
@@ -123,40 +142,35 @@ $(document).ready(function(){
         }
     }
 
-    function arayuzHide(){
-        $(".karsilastirmaBtn").css("background-color","transparent");      
-        $(".genelortalamaBtn").css("background-color","transparent");      
-        $(".eszamanliBtn").css("background-color","transparent");      
-         
-        $(".eszamanliArayuzu").hide();        
-        $(".karsilastirmaArayuzu").hide();
-        $(".genelortalamaArayuzu").hide();        
-    }
 
-    arayuzHide();
-    $(".eszamanliArayuzu").show(); 
 
-   
+
+
+
 
 
     if (!localStorage.getItem("sayfa")){
-        localStorage.getItem("sayfa") = "";
+        localStorage.setItem("sayfa", "");
     }
 
     if (localStorage.getItem("sayfa") == "karsilastirmaArayuzu"){
         arayuzHide();
         $(".karsilastirmaBtn").css("background-color","#DAF7A6");
-        $(".karsilastirmaArayuzu").show();       
+        $(".karsilastirmaArayuzu").show();
     }
     else if (localStorage.getItem("sayfa") == "genelortalamaArayuzu"){
         arayuzHide();
-        $(".genelortalamaBtn").css("background-color","#DAF7A6");     
+        $(".genelortalamaBtn").css("background-color","#DAF7A6");
         $(".genelortalamaArayuzu").show();
     }
     else if (localStorage.getItem("sayfa") == "eszamanliArayuzu"){
         arayuzHide();
-        $(".eszamanliBtn").css("background-color","#DAF7A6");     
-        $(".eszamanliArayuzu").show();  
+        $(".eszamanliBtn").css("background-color","#DAF7A6");
+        $(".eszamanliArayuzu").show();
+    }
+    else{
+        arayuzHide();
+        $(".eszamanliArayuzu").show();
     }
 
 
@@ -166,19 +180,19 @@ $(document).ready(function(){
         localStorage.setItem("sayfa", "karsilastirmaArayuzu");
         arayuzHide();
         $(".karsilastirmaArayuzu").show();
-        
-    }); 
+
+    });
     $(document).on("click", ".genelortalamaBtn", function(){
-        localStorage.setItem("sayfa", "genelortalamaArayuzu");  
+        localStorage.setItem("sayfa", "genelortalamaArayuzu");
         arayuzHide();
         $(".genelortalamaArayuzu").show();
-                      
+
     });
     $(document).on("click", ".eszamanliBtn", function(){
-        localStorage.setItem("sayfa", "eszamanliArayuzu");         
+        localStorage.setItem("sayfa", "eszamanliArayuzu");
         arayuzHide();
-        $(".eszamanliArayuzu").show();  
-                      
+        $(".eszamanliArayuzu").show();
+
     });
     $(document).on("change", ".genelOrtalamaSelect", function(){
         console.log( $(this).val() );
@@ -208,7 +222,7 @@ $(document).ready(function(){
         datasetsIlk = '<?php print_r($data["datasetsIlk"]); ?>';
         anlikdegerTarihleri = '<?php if (isset($data["anlikdegerTarihleri"])){print_r($data["anlikdegerTarihleri"]);}else{print_r([]);}?>';
 
-        
+
         if (datasets && datasetsIlk && anlikdegerTarihleri){
 
             $(".cardTitle").text("");
@@ -225,7 +239,7 @@ $(document).ready(function(){
             console.log("</datasetsIlk>");
 
 
-   
+
             var simdi = new Date();
 
             suan = sifirKoy(simdi.getHours())+":"+sifirKoy(simdi.getMinutes());
@@ -236,7 +250,7 @@ $(document).ready(function(){
             var myChart11 = new Chart(ctx11, {
                 type: 'line',
                 data: {
-                    labels: JSON.parse(anlikdegerTarihleri),            
+                    labels: JSON.parse(anlikdegerTarihleri),
                     datasets: jpdatasetsIlk
                 },
                 options: {
@@ -260,7 +274,7 @@ $(document).ready(function(){
             var myChart12 = new Chart(ctx12, {
                 type: 'bar',
                 data: {
-                    labels: JSON.parse(anlikdegerTarihleri),            
+                    labels: JSON.parse(anlikdegerTarihleri),
                     datasets: jpdatasetsIlk
                 },
                 options: {
@@ -285,7 +299,7 @@ $(document).ready(function(){
             var myChart0 = new Chart(ctx0, {
                 type: 'line',
                 data: {
-                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],            
+                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],
                     datasets: jpdatasets
                 },
                 options: {
@@ -307,7 +321,7 @@ $(document).ready(function(){
             var myChart1 = new Chart(ctx1, {
                 type: 'bar',
                 data: {
-                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],            
+                    labels: ['∞','∞','∞','∞','∞','∞','∞','∞','∞','∞'],
                     datasets: jpdatasets
                 },
                 options: {
@@ -325,13 +339,13 @@ $(document).ready(function(){
                 }
             });
 
-            
+
 
 
             var ctx2 = document.getElementById('myChart2');
 
 
-            
+
                 let cihaz_idler = [];
                 let avgValues = [];
                 let backgroundColors = [];
@@ -376,10 +390,10 @@ $(document).ready(function(){
                                     }
                                 }]
                             }
-                        }                    
+                        }
                 });
 
-            
+
 
                 var ctx3 = document.getElementById('myChart3');
 
@@ -407,7 +421,7 @@ $(document).ready(function(){
                                     }
                                 }]
                             }
-                        }                    
+                        }
                 });
 
 
@@ -427,7 +441,7 @@ $(document).ready(function(){
 
 
         </script>
-        
+
 
 
 @endsection
