@@ -1,13 +1,13 @@
-Ornek Kayıt Adresi (GET METOD):
+﻿Ornek Kayıt Adresi (GET METOD):
 
 URL:http://kontrolet.net/analizor/public/index.php/wattekle?e=m@gmail.com&p=12345678&c=konya&v=90&a=1
 
 
 Hata Kodları:
 
-0: Kullanıcı adı ya da parola bilgisi yanlış
-1: Hem Eşzamansiz hem de eş zamanlı veri tablosuna da kaydedildi
-2: Aynı cihazdan üst üste veri girildi. Yalnızca eş zamansız tabloya kaydedildi
+0: Kullanıcı adı ya da parola bilgisi yanlış.
+1: Hem eşzamansiz hem de eş zamanlı veri tablosuna kaydedildi.
+2: Aynı cihazdan üst üste veri girildi. Yalnızca eş zamansız tabloya kaydedildi.
 3: Zaman aşımı nedeniyle yalnızca eş zamansız tabloya yazıldı.
 4: Cihaz adi, voltaj ve amper degerinden biri ya da birkaci eksik veya yok.
 5: Eş zamanlı ekleme için en az iki cihazdan veri gerekmektedir. Bu yüzden eş zamanlı ekleme yapılmadı.
