@@ -22,6 +22,9 @@
     .karsilastirmaArayuzu, .eszamanliArayuzu, .genelortalamaArayuzu {
         display:none;
     }
+    .genelOrtalamaSelect {
+        width: 100%;
+    }
 
 
 </style>
@@ -68,9 +71,9 @@
                     </div>
 
                     <div class="row justify-content-center genelortalamaArayuzu mx-0">
-                        <div class="col-6">
+                        <div class="col-12">
 
-                                <div class="row justify-content-end pr-0">
+                                <div class="row justify-content-center pr-0">
                                         <select class="form-control pr-0 mr-0 genelOrtalamaSelect">
 
                                             <option value="genelgrafik">Genel Grafik</option>
