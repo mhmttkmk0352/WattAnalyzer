@@ -188,10 +188,11 @@ class HomeController extends Controller
               
                 if ( isset($jsondecode) ){
                   $say = 0;
-                  print_r($jsondecode);
-             
+                  
+  
+
                   foreach( $jsondecode as $kk=>$vv ){
- 
+
                     $mtn = $kk;
                     $datasetsIlk[$say]["label"] = $mtn;
                     $datasetsIlk[$say]["data"] = $eszamanCikti["anlikDegerler"][$user_id][$kk]["watt"];
@@ -201,6 +202,7 @@ class HomeController extends Controller
 
                     $say++;
                   }
+               
              
                 }
 
@@ -316,10 +318,6 @@ class HomeController extends Controller
           
         }
       }
-
-
-      
- 
 
         //$data["allnotes"] = DB::table("allnotes")->select("users.id","users.name","note_title", "note_description", "note_date")->join("users", "users.id", "=", "allnotes.user_id")->get();
 
