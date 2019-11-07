@@ -50,11 +50,11 @@
                     @if (isset(Auth::user()->name))
 
                         <div class="navbar-brand">
-                        <a href="{{ url("home") }}">
-                            <button class="btn btn-default navbar-btn" style="width:100%;">
-                                <i class="fas fa-redo"></i>
-                                <span class="pl-1">YENİLE</span>
-                            </button>
+                            <a href="{{ url("home") }}">
+                                <button class="btn btn-default navbar-btn" style="width:100%;">
+                                    <i class="fas fa-redo"></i>
+                                    <span class="pl-1">YENİLE</span>
+                                </button>
                             </a>
                         </div>
                         <div class="navbar-brand">
@@ -75,7 +75,15 @@
                                 <span class="pl-1">Genel Ortalama</span>
                             </button>
                         </div>
-
+                        <!--
+                        <div class="navbar-brand">
+                            <select class="form-control">
+                                <option value="watt">Watt</option>
+                                <option value="gerilim">Gerilim</option>
+                                <option value="akim">Akim</option>     
+                            </select>                            
+                        </div>
+                        -->
 
                         @else
 
@@ -83,7 +91,9 @@
                             <button class="btn btn-default navbar-btn" onclick="location.reload()" style="width:100%;">
                                      <i class="fas fa-home"></i> ANASAYFA
                             </button>
-                        </div>       
+                        </div>   
+                        
+
 
                     @endif
 
@@ -137,6 +147,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+      
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

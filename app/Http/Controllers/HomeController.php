@@ -80,7 +80,9 @@ class HomeController extends Controller
                 
                 foreach($anlikdeger as $k=>$v){
                   $anlik[$v->user_id][$v->cihaz_id]["watt"][] = $v->watt;
-                
+                  $anlik[$v->user_id][$v->cihaz_id]["voltaj"][] = $v->voltaj;
+                  $anlik[$v->user_id][$v->cihaz_id]["amper"][] = $v->amper;
+                  
                 }
                 
               }
@@ -186,14 +188,17 @@ class HomeController extends Controller
               
                 if ( isset($jsondecode) ){
                   $say = 0;
+                  print_r($jsondecode);
              
                   foreach( $jsondecode as $kk=>$vv ){
-                   
-                    $datasetsIlk[$say]["label"] = $kk;
+ 
+                    $mtn = $kk;
+                    $datasetsIlk[$say]["label"] = $mtn;
                     $datasetsIlk[$say]["data"] = $eszamanCikti["anlikDegerler"][$user_id][$kk]["watt"];
                     $datasetsIlk[$say]["backgroundColor"] = $this->backgroundColor[$say];
                     $datasetsIlk[$say]["borderColor"] = $this->borderColor[$say];
                     $datasetsIlk[$say]["borderWidth"] = 1;
+
                     $say++;
                   }
              
