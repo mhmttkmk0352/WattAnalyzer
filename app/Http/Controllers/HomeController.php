@@ -24,6 +24,7 @@ class HomeController extends Controller
      */
 
     public $arrData = [];
+    public $tipWhere = "watt";
 
     public $backgroundColor = 
     [
@@ -99,10 +100,9 @@ class HomeController extends Controller
             
             if ( isset($v) ){
               if ( count($v)>0 ){
-                foreach($v as $kk=>$vv){
-                  
-                  $watt = array_reverse($vv["watt"]);
-                  $anlik[$user_id][$kk]["watt"] = $watt;
+                foreach($v as $kk=>$vv){    
+                  $watt = ($vv["watt"]);
+                  $anlik[$user_id][$kk]["watt"] = ($watt);
                 }
               }
             }
@@ -118,9 +118,26 @@ class HomeController extends Controller
 
     public function index()
     {
+      
+    
+      if ( isset($_GET) ){
+        if ( isset($_GET["t"]) ){
+          $t = $_GET["t"];
+          $this->tipWhere = $t;  
 
-
-
+        }
+        else{
+          $_GET["t"] = "watt";
+          header("location: ".url('home?t=watt'));
+          exit();
+          
+        }
+      }
+      else{
+        $_GET["t"] = "watt";
+        header("location: ".url('home?t=watt'));
+        exit();
+      }
 
       $suan = time();
       $birsaat = 60*60;
@@ -158,9 +175,6 @@ class HomeController extends Controller
 
 
 
-
-
-
       $data["datasetsIlk"] = "";
       $data["datasets"] = "";
 
@@ -180,6 +194,7 @@ class HomeController extends Controller
         if ( isset($es) ){
           if ( count($es)>0 ){
             foreach($es as $k=>$v){
+        
               array_push($anlikdegerTarihleri, date("h:i:s", $v->tarih));
               array_push($anlikdegerTimeStamp, $v->tarih);
               
@@ -193,9 +208,12 @@ class HomeController extends Controller
 
                   foreach( $jsondecode as $kk=>$vv ){
 
-                    $mtn = $kk;
-                    $datasetsIlk[$say]["label"] = $mtn;
-                    $datasetsIlk[$say]["data"] = $eszamanCikti["anlikDegerler"][$user_id][$kk]["watt"];
+                    $mtn = array("isim: ".$kk);
+                    
+                    
+                    $datasetsIlk[$say]["label"] = $kk;
+                    
+                    $datasetsIlk[$say]["data"] = array_reverse( $eszamanCikti["anlikDegerler"][$user_id][$kk][$this->tipWhere] );
                     $datasetsIlk[$say]["backgroundColor"] = $this->backgroundColor[$say];
                     $datasetsIlk[$say]["borderColor"] = $this->borderColor[$say];
                     $datasetsIlk[$say]["borderWidth"] = 1;

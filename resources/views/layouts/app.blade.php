@@ -50,6 +50,13 @@
                     @if (isset(Auth::user()->name))
 
                         <div class="navbar-brand">
+                            <select class="form-control wgaSelect">
+                                <option value="watt">Güç</option>
+                                <option value="voltaj">Gerilim</option>
+                                <option value="amper">Akim</option>     
+                            </select>                            
+                        </div>
+                        <div class="navbar-brand">
                             <a href="{{ url("home") }}">
                                 <button class="btn btn-default navbar-btn" style="width:100%;">
                                     <i class="fas fa-redo"></i>
@@ -75,17 +82,11 @@
                                 <span class="pl-1">Genel Ortalama</span>
                             </button>
                         </div>
-                        <!--
-                        <div class="navbar-brand">
-                            <select class="form-control">
-                                <option value="watt">Watt</option>
-                                <option value="gerilim">Gerilim</option>
-                                <option value="akim">Akim</option>     
-                            </select>                            
-                        </div>
-                        -->
+                        
+   
+                        
 
-                        @else
+                    @else
 
                         <div class="navbar-brand">
                             <button class="btn btn-default navbar-btn" onclick="location.reload()" style="width:100%;">
@@ -113,8 +114,6 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-
-
 
 
                             <li class="nav-item">

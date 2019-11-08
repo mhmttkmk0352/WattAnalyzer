@@ -2,7 +2,7 @@
 @section('content')
 
 
-<script type="text/javascript" charset="utf8" src="../../node_modules/chart.js/dist/Chart.js"></script>
+<script type="text/javascript" charset="utf8" src="{{asset('js/chart.js/dist/Chart.js')}}"></script>
 
 <script>
 
@@ -136,7 +136,7 @@ $(document).ready(function(){
     }
     arayuzHide();
 
-
+ 
 
     if (location.search && location.search != ""){
         var lo_se = location.search.replace("?","").split("=")[1];
@@ -144,14 +144,12 @@ $(document).ready(function(){
             $(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
         }
     }
+    else{
+       
+    }
 
 
-
-
-
-
-
-
+    
     if (!localStorage.getItem("sayfa")){
         localStorage.setItem("sayfa", "");
     }
@@ -177,6 +175,26 @@ $(document).ready(function(){
     }
 
 
+    if ( !localStorage.getItem("enerjiTipi") ){
+       localStorage.setItem("enerjiTipi", "");
+    }
+
+    if ( localStorage.getItem("enerjiTipi") == "watt" ){
+       $(".wgaSelect").val("watt");
+    }
+    else if(localStorage.getItem("enerjiTipi") == "voltaj" ){
+        $(".wgaSelect").val("voltaj");
+    }
+    else if(localStorage.getItem("enerjiTipi") == "amper" ){
+        $(".wgaSelect").val("amper");        
+    }
+    else{
+        $(".wgaSelect").val("watt");    
+    }
+  
+    if ( location.search == "?t=watt"){
+        $(".wgaSelect").val("watt");
+    }
 
 
     $(document).on("click", ".karsilastirmaBtn", function(){
@@ -203,6 +221,12 @@ $(document).ready(function(){
     });
 
 
+    $(document).on("change", ".wgaSelect", function(){
+        var wgaValue = $(this).val();
+        console.log(wgaValue);
+        localStorage.setItem("enerjiTipi", wgaValue);
+        document.location = "{{url('home?t=')}}"+wgaValue;
+    });
 
 
 
@@ -259,7 +283,7 @@ $(document).ready(function(){
                 options: {
                     title: {
                         display: true,
-                        text: "Çizgisel Analiz (Watt)"
+                        text: "Çizgisel Analiz ({{$_GET['t']}})"
                     },
                     scales: {
                         yAxes: [{
@@ -283,7 +307,7 @@ $(document).ready(function(){
                 options: {
                     title: {
                         display: true,
-                        text: "Çizgisel Analiz (Watt)"
+                        text: "Çizgisel Analiz ({{$_GET['t']}})"
                     },
                     scales: {
                         yAxes: [{
@@ -308,7 +332,7 @@ $(document).ready(function(){
                 options: {
                     title: {
                         display: true,
-                        text: "Çizgisel Analiz (Watt)"
+                        text: "Çizgisel Analiz ({{$_GET['t']}})"
                     },
                     scales: {
                         yAxes: [{
@@ -330,7 +354,7 @@ $(document).ready(function(){
                 options: {
                     title: {
                         display: true,
-                        text: "Boyutsal Analiz (Watt)"
+                        text: "Boyutsal Analiz ({{$_GET['t']}})"
                     },
                     scales: {
                         yAxes: [{

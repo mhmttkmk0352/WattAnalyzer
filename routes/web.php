@@ -19,6 +19,7 @@ Route::get("/wattekle", "WattKiyas@wattekle")->name("wattekle");
 
 Auth::routes();
 
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 
