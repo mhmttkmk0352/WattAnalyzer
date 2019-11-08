@@ -52,17 +52,27 @@ class HomeController extends Controller
       $p = DB::table("watt_karsilastir")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->orderBy("id","DESC")->limit($olayLimiti)->get();
       $w = array();
       foreach($p as $k=>$v){
-        $w[$k] = $v->watt;
+        if ($this->tipWhere == "watt"){
+          $w[$k] = $v->watt;
+        }
+        elseif ($this->tipWhere == "voltaj"){
+          $w[$k] = $v->voltaj;
+        }
+        elseif ($this->tipWhere == "amper"){
+          $w[$k] = $v->amper;
+        }
+
       }
       $x = array_reverse($w);
+
       return $x;
       
     } 
 
 
 
-    public function Average($user_id, $cihaz_id, $whereBetween){
-          $avgValue = DB::table("watt_eszamanlikarsilastir")->select("watt")->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->whereBetween("tarih",$whereBetween)->get()->avg("watt");
+    public function Average($user_id, $cihaz_id, $whereBetween, $tip){
+          $avgValue = DB::table("watt_eszamanlikarsilastir")->select($tip)->where("user_id", $user_id)->where("cihaz_id", $cihaz_id)->whereBetween("tarih",$whereBetween)->get()->avg($tip);
           return round($avgValue,1);
     }
 
@@ -272,7 +282,7 @@ class HomeController extends Controller
 
 
               foreach($deviceLists as $k=>$v){
-                $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id, $whereBetween);
+                $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id, $whereBetween, $this->tipWhere);
                 $datasets[$k]["label"] = $v->cihaz_id;
                 $datasets[$k]["data"] = $this->DevicesLastData($user_id, $v->cihaz_id, $olayLimiti);
                 $datasets[$k]["backgroundColor"] = $this->backgroundColor[$k];
