@@ -181,7 +181,6 @@ $(document).ready(function(){
 
     if ( localStorage.getItem("enerjiTipi") == "watt" ){
        $(".wgaSelect").val("watt");
-      
     }
     else if(localStorage.getItem("enerjiTipi") == "voltaj" ){
         $(".wgaSelect").val("voltaj");
