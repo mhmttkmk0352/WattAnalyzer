@@ -136,7 +136,7 @@ $(document).ready(function(){
     }
     arayuzHide();
 
- 
+
 
     if (location.search && location.search != ""){
         var lo_se = location.search.replace("?","").split("=")[1];
@@ -145,11 +145,11 @@ $(document).ready(function(){
         }
     }
     else{
-       
+
     }
 
 
-    
+
     if (!localStorage.getItem("sayfa")){
         localStorage.setItem("sayfa", "");
     }
@@ -186,12 +186,12 @@ $(document).ready(function(){
         $(".wgaSelect").val("voltaj");
     }
     else if(localStorage.getItem("enerjiTipi") == "amper" ){
-        $(".wgaSelect").val("amper");        
+        $(".wgaSelect").val("amper");
     }
     else{
-        $(".wgaSelect").val("watt");    
+        $(".wgaSelect").val("watt");
     }
-  
+
 
 
 
@@ -226,6 +226,10 @@ $(document).ready(function(){
         document.location = "{{url('home?t=')}}"+wgaValue;
     });
 
+    $(document).on("click", ".yenileBtn", function(){
+        var wgaValue = $(".wgaSelect").val();
+        document.location = "{{url('home?t=')}}"+wgaValue;
+    });
 
 
     function sifirKoy(d){
