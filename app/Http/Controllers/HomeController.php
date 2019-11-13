@@ -26,7 +26,7 @@ class HomeController extends Controller
     public $arrData = [];
     public $tipWhere = "watt";
 
-    public $backgroundColor = 
+    public $backgroundColor =
     [
       'rgba(255, 99, 132, 0.2)',
       'rgba(54, 162, 235, 0.2)',
@@ -35,7 +35,7 @@ class HomeController extends Controller
       'rgba(153, 102, 255, 0.2)',
       'rgba(255, 159, 64, 0.2)'
     ];
-    public $borderColor = 
+    public $borderColor =
     [
       'rgba(255, 99, 132, 1)',
       'rgba(54, 162, 235, 1)',
@@ -43,7 +43,7 @@ class HomeController extends Controller
       'rgba(75, 192, 192, 1)',
       'rgba(153, 102, 255, 1)',
       'rgba(255, 159, 64, 1)'
-    ];  
+    ];
 
 
 
@@ -66,8 +66,8 @@ class HomeController extends Controller
       $x = array_reverse($w);
 
       return $x;
-      
-    } 
+
+    }
 
 
 
@@ -79,7 +79,7 @@ class HomeController extends Controller
 
     public function eszamanliVerileriGetir($user_id, $olayLimiti, $whereBetween){
       $c = DB::table("watt_eszamanli")->where("user_id", $user_id)->orderBy("id", "DESC")->limit($olayLimiti)->whereBetween("tarih",$whereBetween)->get();
-      
+
       $anlik = [];
 
       if (isset($c)){
@@ -88,14 +88,14 @@ class HomeController extends Controller
             if ( isset($v->anlikdeger) ){
               $anlikdeger = json_decode($v->anlikdeger);
               if ( isset($anlikdeger) ){
-                
+
                 foreach($anlikdeger as $k=>$v){
                   $anlik[$v->user_id][$v->cihaz_id]["watt"][] = $v->watt;
                   $anlik[$v->user_id][$v->cihaz_id]["voltaj"][] = $v->voltaj;
                   $anlik[$v->user_id][$v->cihaz_id]["amper"][] = $v->amper;
-                  
+
                 }
-                
+
               }
             }
           }
@@ -105,12 +105,12 @@ class HomeController extends Controller
       /* Anlık değerlerin bulunduğu diziyi(array) ters çevir*/
       if ( isset($anlik) ){
         if ( count($anlik)>0 ){
-       
+
           foreach($anlik as $k=>$v){
-            
+
             if ( isset($v) ){
               if ( count($v)>0 ){
-                foreach($v as $kk=>$vv){    
+                foreach($v as $kk=>$vv){
                   $watt = ($vv["watt"]);
                   $anlik[$user_id][$kk]["watt"] = ($watt);
                 }
@@ -128,24 +128,24 @@ class HomeController extends Controller
 
     public function index()
     {
-      
-    
+
+
       if ( isset($_GET) ){
         if ( isset($_GET["t"]) ){
           $t = $_GET["t"];
-          $this->tipWhere = $t;  
+          $this->tipWhere = $t;
 
         }
         else{
-          $_GET["t"] = "watt";
-          header("location: ".url('home?t=watt'));
+          $_GET["t"] = "voltaj";
+          header("location: ".url('home?t=voltaj'));
           exit();
-          
+
         }
       }
       else{
-        $_GET["t"] = "watt";
-        header("location: ".url('home?t=watt'));
+        $_GET["t"] = "voltaj";
+        header("location: ".url('home?t=voltaj'));
         exit();
       }
 
@@ -162,10 +162,10 @@ class HomeController extends Controller
       if ( isset($_GET["genelortalama"]) && $_GET["genelortalama"] !=""){
         if ( $_GET["genelortalama"] == "birsaatinGrafigi"){
           $whereBetween = array(($suan-$birsaat), $suan);
-        }           
+        }
         else if ( $_GET["genelortalama"] == "gununGrafigi"){
           $whereBetween = array(($suan-$gun), $suan);
-        }         
+        }
         else if ( $_GET["genelortalama"] == "haftaninGrafigi"){
           $whereBetween = array(($suan-$hafta), $suan);
         }
@@ -191,9 +191,9 @@ class HomeController extends Controller
       $olayLimiti = 10;
       $data["deviceValuesCount"] = 0;
       $data["datasets"] = "";
-      
+
       $user_id = Auth::user()->id;
- 
+
       if (isset($user_id)){
 
 
@@ -204,25 +204,25 @@ class HomeController extends Controller
         if ( isset($es) ){
           if ( count($es)>0 ){
             foreach($es as $k=>$v){
-        
+
               array_push($anlikdegerTarihleri, date("h:i:s", $v->tarih));
               array_push($anlikdegerTimeStamp, $v->tarih);
-              
+
               if ( isset($v->anlikdeger) ){
-                $jsondecode = json_decode($v->anlikdeger); 
-              
+                $jsondecode = json_decode($v->anlikdeger);
+
                 if ( isset($jsondecode) ){
                   $say = 0;
-                  
-  
+
+
 
                   foreach( $jsondecode as $kk=>$vv ){
 
                     $mtn = array("isim: ".$kk);
-                    
-                    
+
+
                     $datasetsIlk[$say]["label"] = $kk;
-                    
+
                     $datasetsIlk[$say]["data"] = array_reverse( $eszamanCikti["anlikDegerler"][$user_id][$kk][$this->tipWhere] );
                     $datasetsIlk[$say]["backgroundColor"] = $this->backgroundColor[$say];
                     $datasetsIlk[$say]["borderColor"] = $this->borderColor[$say];
@@ -230,15 +230,16 @@ class HomeController extends Controller
 
                     $say++;
                   }
-               
-             
+
+
                 }
 
               }
 
             }
+            $anlikdegerTarihleri = array_reverse($anlikdegerTarihleri);
+            $anlikdegerTimeStamp = array_reverse($anlikdegerTimeStamp);
 
-            
           }
         }
 
@@ -254,12 +255,12 @@ class HomeController extends Controller
 
 
               /* DATA DEĞERLERİ TOPLAMA ALANI */
-              
-              
+
+
 
               /* CHARTJS RENK TANIMLAMALARI BAŞLANGIÇ*/
-              
-              $backgroundColor = 
+
+              $backgroundColor =
               [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -268,7 +269,7 @@ class HomeController extends Controller
                 'rgba(153, 102, 255, 0.2)',
                 'rgba(255, 159, 64, 0.2)'
               ];
-              $borderColor = 
+              $borderColor =
               [
                 'rgba(255, 99, 132, 1)',
                 'rgba(54, 162, 235, 1)',
@@ -282,34 +283,46 @@ class HomeController extends Controller
 
 
               foreach($deviceLists as $k=>$v){
+                $sonIslemTarih = DB::table("watt_karsilastir")->select("tarih")->where("cihaz_id", $v->cihaz_id)->get()->last();
+                $sonIslemZamani[$v->cihaz_id] = date("h:i:s", $sonIslemTarih->tarih);
+
                 $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id, $whereBetween, $this->tipWhere);
                 $datasets[$k]["label"] = $v->cihaz_id;
                 $datasets[$k]["data"] = $this->DevicesLastData($user_id, $v->cihaz_id, $olayLimiti);
                 $datasets[$k]["backgroundColor"] = $this->backgroundColor[$k];
                 $datasets[$k]["borderColor"] = $this->borderColor[$k];
                 $datasets[$k]["borderWidth"] = 1;
-                
+
                 // Bu kısım cihaz değerlerinin en yüksek olanını alıp Charts'e dengeli bir şekilde aktarmak içindir.
                 if ( count($datasets[$k]["data"]) > $data["deviceValuesCount"] ){
                     $data["deviceValuesCount"] = count($datasets[$k]["data"]);
                 }
               }
+              //print_r($sonIslemZamani);
+              //print_r($sonIslemZamani);
 
               if (isset($datasets)){
                   foreach($datasets as $k=>$v){
-                    
+
                     $fark = $data["deviceValuesCount"] - count($v["data"]);
                     if ( $fark == 0  ){
 
                     }
                     else{
                       for($i=0; $i<$fark; $i++){
-                           array_unshift($datasets[$k]["data"], 0);          
+                           array_unshift($datasets[$k]["data"], 0);
                       }
-                     
-                      
+
+
                     }
                   }
+              }
+
+              if ( isset($sonIslemZamani) ){
+                $data["sonIslemZamani"] = json_encode($sonIslemZamani);
+              }
+              else{
+                $data["sonIslemZamani"] = "";
               }
 
               if ( isset($anlikdegerTarihleri) ){
@@ -320,7 +333,7 @@ class HomeController extends Controller
               }
 
               if ( isset($anlikdegerTimeStamp) ){
-                $data["anlikdegerTimeStamp"] = json_encode($anlikdegerTimeStamp);                
+                $data["anlikdegerTimeStamp"] = json_encode($anlikdegerTimeStamp);
               }
               else{
                 $data["anlikdegerTimeStamp"] = [];
@@ -342,20 +355,20 @@ class HomeController extends Controller
 
             }
           }
-  
-          
+
+
         }
       }
 
         //$data["allnotes"] = DB::table("allnotes")->select("users.id","users.name","note_title", "note_description", "note_date")->join("users", "users.id", "=", "allnotes.user_id")->get();
 
         return view('home', array("data"=>$data));
-    
+
     }
 
 
 
-  
 
-    
+
+
 }

@@ -36,12 +36,9 @@
             <div class="card">
                 <div class="card-header cardHeaderFooter">
                         <div class="row justify-content-center text-center">
+                            <div class="sonIslemZamani">
 
-                                <span class="cardTitle" style="font-weight: bold; font-size: 1em; color: #191919">
-
-                                </span>
-
-
+                            </div>
                         </div>
                 </div>
 
@@ -193,6 +190,20 @@ $(document).ready(function(){
     }
 
 
+    if ( location.search ){
+
+        if (location.search == "?t=watt"){
+            $(".wgaSelect").val("watt");
+        }
+        else if(location.search == "?t=voltaj"){
+            $(".wgaSelect").val("voltaj");
+        }
+        else if(location.search == "?t=amper"){
+            $(".wgaSelect").val("amper");
+        }
+
+    }
+
 
 
     $(document).on("click", ".karsilastirmaBtn", function(){
@@ -247,10 +258,25 @@ $(document).ready(function(){
         var datasets = "";
         var datasetsIlk = "";
         var anlikdegerTarihleri = "";
+        var sonIslemZamani = "";
+        var sonIslemListesi = "";
         datasets = '<?php print_r($data["datasets"]); ?>';
         datasetsIlk = '<?php print_r($data["datasetsIlk"]); ?>';
         anlikdegerTarihleri = '<?php if (isset($data["anlikdegerTarihleri"])){print_r($data["anlikdegerTarihleri"]);}else{print_r([]);}?>';
+        sonIslemZamani = '<?php if (isset($data["sonIslemZamani"])){print_r($data["sonIslemZamani"]);}else{print_r([]);}?>';
 
+        if ( sonIslemZamani && sonIslemZamani.length>0 ){
+            let jp = JSON.parse(sonIslemZamani);
+            console.log(typeof jp);
+            if ( jp && typeof jp == "object" && Object.keys(jp).length>0 ){
+                for (item in jp) {
+                    sonIslemListesi += '<span style="color:red">'+item+':</span>'+jp[item]+' ';
+                }
+
+                console.log(sonIslemListesi);
+                $(".sonIslemZamani").html(sonIslemListesi);
+            }
+        }
 
         if (datasets && datasetsIlk && anlikdegerTarihleri){
 
@@ -431,7 +457,7 @@ $(document).ready(function(){
                         data: {
                             labels: cihaz_idler,
                             datasets: [{
-                                label: 'watt cinsinden: ',
+                                label: '{{$_GET['t']}} cinsinden: ',
                                 data: avgValues,
                                 backgroundColor: backgroundColors,
                                 borderColor: borderColors,
