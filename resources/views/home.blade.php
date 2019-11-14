@@ -136,10 +136,13 @@ $(document).ready(function(){
 
 
     if (location.search && location.search != ""){
-        var lo_se = location.search.replace("?","").split("=")[1];
-        if (lo_se && lo_se != ""){
-            $(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
-        }
+        //var lo_se = location.search.replace("?","").split("=")[1];
+        //console.log( lo_se );
+        
+        //if (lo_se && lo_se != ""){
+            //$(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
+        //}
+        
     }
     else{
 
@@ -171,22 +174,26 @@ $(document).ready(function(){
         $(".eszamanliArayuzu").show();
     }
 
-
+    var wgaSelect_val = "";
     if ( !localStorage.getItem("enerjiTipi") ){
        localStorage.setItem("enerjiTipi", "");
     }
 
     if ( localStorage.getItem("enerjiTipi") == "watt" ){
        $(".wgaSelect").val("watt");
+       wgaSelect_val = "watt";
     }
     else if(localStorage.getItem("enerjiTipi") == "voltaj" ){
         $(".wgaSelect").val("voltaj");
+        wgaSelect_val = "voltaj";       
     }
     else if(localStorage.getItem("enerjiTipi") == "amper" ){
         $(".wgaSelect").val("amper");
+        wgaSelect_val = "amper";
     }
     else{
         $(".wgaSelect").val("watt");
+        wgaSelect_val = "watt";
     }
 
 
@@ -225,14 +232,36 @@ $(document).ready(function(){
 
     });
     $(document).on("change", ".genelOrtalamaSelect", function(){
-        console.log( $(this).val() );
-        location.href = '{{ url("/home")}}?genelortalama='+$(this).val();
+
+
+
+        /*
+        let url_topla = location.search;
+        let ls_s = location.search.split("&");
+
+
+        if (ls_s && ls_s.length>0){
+            ls_s.forEach(function(v,k){
+                if ( url_topla.indexOf("genelortalama")>-1 ){
+                    url_topla = url_topla.replace(v, "").replace("&"+v,"") ;
+                }
+                
+            });
+
+            console.log("-->");
+            console.log(url_topla);
+
+
+        }
+*/
+        let yeniUrl = "?t="+wgaSelect_val+"&genelortalama="+$(this).val();
+        location.href = yeniUrl;
+
     });
 
 
     $(document).on("change", ".wgaSelect", function(){
         var wgaValue = $(this).val();
-        console.log(wgaValue);
         localStorage.setItem("enerjiTipi", wgaValue);
         document.location = "{{url('home?t=')}}"+wgaValue;
     });
@@ -267,13 +296,13 @@ $(document).ready(function(){
 
         if ( sonIslemZamani && sonIslemZamani.length>0 ){
             let jp = JSON.parse(sonIslemZamani);
-            console.log(typeof jp);
+     
             if ( jp && typeof jp == "object" && Object.keys(jp).length>0 ){
                 for (item in jp) {
                     sonIslemListesi += '<span style="color:red">'+item+':</span>'+jp[item]+' ';
                 }
 
-                console.log(sonIslemListesi);
+     
                 $(".sonIslemZamani").html(sonIslemListesi);
             }
         }
