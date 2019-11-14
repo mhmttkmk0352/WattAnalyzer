@@ -303,7 +303,7 @@ $(document).ready(function(){
      
             if ( jp && typeof jp == "object" && Object.keys(jp).length>0 ){
                 for (item in jp) {
-                    sonIslemListesi += '<span style="color:red">'+item+':</span>'+jp[item]+' ';
+                    sonIslemListesi += '<span style="color:red">'+item+':</span><span style="font-weight: bold">'+jp[item]+'</span> ';
                 }
 
      
