@@ -135,13 +135,17 @@ $(document).ready(function(){
 
 
 
-    if (location.search && location.search != ""){
-        //var lo_se = location.search.replace("?","").split("=")[1];
-        //console.log( lo_se );
+    if ( location.search && location.search != "" && location.search.indexOf("genelortalama=")>-1 ){
+ 
         
-        //if (lo_se && lo_se != ""){
-            //$(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
-        //}
+        if ( location.search.replace("?","").split("&")[1].split("=")[1] ){
+
+            var lo_se = location.search.replace("?","").split("&")[1].split("=")[1];
+            console.log( lo_se );
+
+            $(".genelOrtalamaSelect option[value="+lo_se+"]").attr("selected","select");
+        }
+        
         
     }
     else{
