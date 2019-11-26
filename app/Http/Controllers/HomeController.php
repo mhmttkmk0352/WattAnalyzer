@@ -284,7 +284,7 @@ class HomeController extends Controller
 
               foreach($deviceLists as $k=>$v){
                 $sonIslemTarih = DB::table("watt_karsilastir")->select("tarih")->where("cihaz_id", $v->cihaz_id)->get()->last();
-                $sonIslemZamani[$v->cihaz_id] = date("h:i:s", $sonIslemTarih->tarih);
+                $sonIslemZamani[$v->cihaz_id] = date("d/m/Y h:i:s", $sonIslemTarih->tarih);
 
                 $datasets[$k]["avgValue"] = $this->Average($user_id, $v->cihaz_id, $whereBetween, $this->tipWhere);
                 $datasets[$k]["label"] = $v->cihaz_id;
